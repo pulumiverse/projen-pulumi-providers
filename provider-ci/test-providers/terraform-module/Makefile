@@ -123,7 +123,7 @@ test_provider:
 # - Run make ci-mgmt to apply the change locally.
 #
 ci-mgmt: .ci-mgmt.yaml
-	go run github.com/pulumi/ci-mgmt/provider-ci@master generate
+	go run github.com/pulumi-labs/ci-mgmt/provider-ci@master generate
 .PHONY: ci-mgmt
 
 include scripts/crossbuild.mk
