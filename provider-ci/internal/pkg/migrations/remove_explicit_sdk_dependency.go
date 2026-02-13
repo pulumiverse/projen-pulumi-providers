@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/pulumi/ci-mgmt/provider-ci/internal/pkg/contract"
+	"github.com/pulumi-labs/ci-mgmt/provider-ci/internal/pkg/contract"
 )
 
 //go:embed remove_explicit_sdk_dependency.patch

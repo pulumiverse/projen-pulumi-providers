@@ -97,7 +97,7 @@ To add a new provider:
    repository root:
 
    ```bash
-   go run github.com/pulumi/ci-mgmt/provider-ci@master generate \
+   go run github.com/pulumi-labs/ci-mgmt/provider-ci@master generate \
       --name pulumi/pulumi-$(PROVIDER_NAME) \
       --out . \
       --template bridged-provider \
