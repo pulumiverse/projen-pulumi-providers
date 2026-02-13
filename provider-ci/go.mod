@@ -1,8 +1,6 @@
 module github.com/pulumi/ci-mgmt/provider-ci
 
-go 1.24.0
-
-toolchain go1.24.7
+go 1.24.11
 
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
