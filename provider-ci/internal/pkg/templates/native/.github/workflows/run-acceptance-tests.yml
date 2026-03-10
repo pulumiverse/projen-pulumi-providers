@@ -49,9 +49,6 @@ jobs:
     runs-on: ubuntu-latest
     name: prerequisites
     permissions:
-      #{{- if .Config.ESC.Enabled }}#
-      id-token: write # For ESC secrets.
-      #{{- end }}#
       pull-requests: write # For schema check comment.
     steps:
     - name: Checkout Repo
@@ -60,13 +57,12 @@ jobs:
         lfs: true
         persist-credentials: false
         ref: ${{ env.PR_COMMIT_SHA }}
-#{{- .Config | renderEscStep | indent 4 }}#
 #{{- if .Config.GitHubApp.Enabled }}#
     - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: app-auth
       with:
-        app-id: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
-        private-key: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
+        app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
+        private-key: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - id: version
@@ -80,7 +76,7 @@ jobs:
       uses: ./.github/actions/setup-tools
       with:
         cache: 'true'
-        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_TOKEN || steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}#{{ end }}#
+        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ secrets.PULUMI_PROVIDER_AUTOMATION_TOKEN }}#{{ end }}#
     #{{- if ne .Config.Provider "command" }}#
     - if: github.event_name == 'pull_request'
       name: Install Schema Tools
@@ -122,7 +118,7 @@ jobs:
           echo 'EOF';
         } >> "$GITHUB_ENV"
       env:
-        GITHUB_TOKEN: ${{ steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PULUMI_BOT_TOKEN }}
     - if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
       name: Comment on PR with Details of Schema Check
       uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b # v3.0.1
@@ -200,7 +196,7 @@ jobs:
         # Push with pulumi-bot credentials to trigger a re-run of the
         # workflow. https://github.com/orgs/community/discussions/25702
 
-        git push https://pulumi-bot:${{ steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}@github.com/${{ github.repository }}     "HEAD:$HEAD_REF"
+        git push https://pulumi-bot:${{ secrets.PULUMI_BOT_TOKEN }}@github.com/${{ github.repository }}     "HEAD:$HEAD_REF"
       env:
         HEAD_REF: ${{ github.head_ref }}
     - run: git status --porcelain
@@ -237,7 +233,7 @@ jobs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
       env:
-        CODECOV_TOKEN: ${{ steps.esc-secrets.outputs.CODECOV_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - if: failure() && github.event_name == 'push'
       name: Notify Slack
       uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
@@ -246,7 +242,7 @@ jobs:
         fields: repo,commit,author,action
         status: ${{ job.status }}
       env:
-        SLACK_WEBHOOK_URL: ${{ steps.esc-secrets.outputs.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     if: github.event_name == 'repository_dispatch' ||
       github.event.pull_request.head.repo.full_name == github.repository
   build_sdks:
@@ -264,9 +260,6 @@ jobs:
     name: build_sdks
     permissions:
       contents: read
-      #{{- if .Config.ESC.Enabled }}#
-      id-token: write # For ESC secrets.
-      #{{- end }}#
     steps:
     - name: Checkout Repo
       uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -274,13 +267,12 @@ jobs:
         lfs: true
         persist-credentials: false
         ref: ${{ env.PR_COMMIT_SHA }}
-#{{- .Config | renderEscStep | indent 4 }}#
 #{{- if .Config.GitHubApp.Enabled }}#
     - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: app-auth
       with:
-        app-id: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
-        private-key: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
+        app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
+        private-key: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - id: version
@@ -293,7 +285,7 @@ jobs:
     - name: Setup Tools
       uses: ./.github/actions/setup-tools
       with:
-        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_TOKEN || steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}#{{ end }}#
+        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ secrets.PULUMI_PROVIDER_AUTOMATION_TOKEN }}#{{ end }}#
     - name: Download provider
       uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
       with:
@@ -367,7 +359,7 @@ jobs:
         # Push with pulumi-bot credentials to trigger a re-run of the
         # workflow. https://github.com/orgs/community/discussions/25702
 
-        git push https://pulumi-bot:${{ steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}@github.com/${{ github.repository }}     "HEAD:$HEAD_REF"
+        git push https://pulumi-bot:${{ secrets.PULUMI_BOT_TOKEN }}@github.com/${{ github.repository }}     "HEAD:$HEAD_REF"
       env:
         HEAD_REF: ${{ github.head_ref }}
     - run: git status --porcelain
@@ -387,7 +379,7 @@ jobs:
         fields: repo,commit,author,action
         status: ${{ job.status }}
       env:
-        SLACK_WEBHOOK_URL: ${{ steps.esc-secrets.outputs.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     if: github.event_name == 'repository_dispatch' ||
       github.event.pull_request.head.repo.full_name == github.repository
   test:
@@ -407,9 +399,6 @@ jobs:
     name: test
     permissions:
       contents: read
-      #{{- if .Config.ESC.Enabled }}#
-      id-token: write
-      #{{- end }}#
     steps:
     - name: Checkout Repo
       uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -417,13 +406,12 @@ jobs:
         lfs: true
         persist-credentials: false
         ref: ${{ env.PR_COMMIT_SHA }}
-#{{- .Config | renderEscStep | indent 4 }}#
 #{{- if .Config.GitHubApp.Enabled }}#
     - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
       id: app-auth
       with:
-        app-id: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
-        private-key: ${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
+        app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
+        private-key: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - id: version
@@ -436,7 +424,7 @@ jobs:
     - name: Setup Tools
       uses: ./.github/actions/setup-tools
       with:
-        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ steps.esc-secrets.outputs.PULUMI_PROVIDER_AUTOMATION_TOKEN || steps.esc-secrets.outputs.PULUMI_BOT_TOKEN }}#{{ end }}#
+        github_token: #{{ if .Config.GitHubApp.Enabled }}#${{ steps.app-auth.outputs.token }}#{{ else }}#${{ secrets.PULUMI_PROVIDER_AUTOMATION_TOKEN }}#{{ end }}#
     - name: Download provider
       uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
       with:
@@ -555,7 +543,7 @@ jobs:
         fields: repo,commit,author,action
         status: ${{ job.status }}
       env:
-        SLACK_WEBHOOK_URL: ${{ steps.esc-secrets.outputs.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     if: github.event_name == 'repository_dispatch' ||
       github.event.pull_request.head.repo.full_name == github.repository
   sentinel:
@@ -568,7 +556,6 @@ jobs:
         lfs: true
         persist-credentials: false
         ref: ${{ env.PR_COMMIT_SHA }}
-#{{- .Config | renderEscStep | indent 4 }}#
     - name: Mark workflow as successful
       uses: guibranco/github-status-action-v2@631f55ea0251f0fb284525ad86c30e9f7a8dd284 # v1.1.14
       with:
@@ -579,9 +566,6 @@ jobs:
         sha: ${{ github.event.pull_request.head.sha || github.sha }}
     permissions:
       statuses: write
-      #{{- if .Config.ESC.Enabled }}#
-      id-token: write # For ESC secrets.
-      #{{- end }}#
     if: github.event_name == 'repository_dispatch' ||
       github.event.pull_request.head.repo.full_name == github.repository
     needs:
