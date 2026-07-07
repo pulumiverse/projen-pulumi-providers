@@ -1,4 +1,4 @@
-module github.com/pulumi-labs/ci-mgmt/provider-ci
+module github.com/pulumiverse/projen-pulumi-providers/provider-ci
 
 go 1.24.11
 

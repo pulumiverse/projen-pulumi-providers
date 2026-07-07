@@ -6,7 +6,7 @@ import (
 	"regexp"
 
 	"github.com/bitfield/script"
-	"github.com/pulumi-labs/ci-mgmt/provider-ci/internal/pkg/contract"
+	"github.com/pulumiverse/projen-pulumi-providers/provider-ci/internal/pkg/contract"
 )
 
 type updateToDotnet8 struct{}
