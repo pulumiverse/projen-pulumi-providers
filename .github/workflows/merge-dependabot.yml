@@ -3,9 +3,9 @@ name: Merge Dependabot PRs
 
 on:
   workflow_dispatch: {}
-  schedule:
+#  schedule:
     # 4:00AM every 4 days.
-    - cron: '0 4 01/4 * *'
+#    - cron: '0 4 01/4 * *'
 env:
   ESC_ACTION_OIDC_AUTH: true
   ESC_ACTION_OIDC_ORGANIZATION: pulumi
