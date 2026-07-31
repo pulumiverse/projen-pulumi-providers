@@ -15,7 +15,7 @@ jobs:
       with:
         persist-credentials: false
     - name: Should release PR
-      uses: pulumi/action-release-by-pr-label@main
+      uses: pulumi/action-release-by-pr-label@a90569296b805a3179b81c1860f5777073cc7aa2
       with:
         command: "should-release"
         repo: ${{ github.repository }}
