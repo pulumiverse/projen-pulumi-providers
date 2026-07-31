@@ -45,7 +45,7 @@ jobs:
         #{{- end }}#
         persist-credentials: false
 #{{- if .Config.GitHubApp.Enabled }}#
-    - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+    - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: app-auth
       with:
         app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
@@ -53,7 +53,7 @@ jobs:
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - name: Install mise
-      uses: jdx/mise-action@c1a019b8d2586943b4dbebc456323b516910e310
+      uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
       env:
         MISE_FETCH_REMOTE_VERSIONS_TIMEOUT: 30s
       with:
@@ -150,7 +150,7 @@ jobs:
         # Persist credentials so we can push back to the repo
         persist-credentials: true
 #{{- if .Config.GitHubApp.Enabled }}#
-    - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+    - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: app-auth
       with:
         app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
@@ -158,7 +158,7 @@ jobs:
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - name: Install mise
-      uses: jdx/mise-action@c1a019b8d2586943b4dbebc456323b516910e310
+      uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
       env:
         MISE_FETCH_REMOTE_VERSIONS_TIMEOUT: 30s
       with:
@@ -167,7 +167,7 @@ jobs:
         # only saving the cache in the prerequisites job
         cache_save: false
     - name: Setup Node
-      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         # we don't set node-version because we install with mise.
         # this step is needed to setup npm auth
@@ -242,7 +242,7 @@ jobs:
         with:
           persist-credentials: false
 #{{- if .Config.GitHubApp.Enabled }}#
-      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-auth
         with:
           app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
@@ -250,7 +250,7 @@ jobs:
           owner: ${{ github.repository_owner }}
 #{{- end }}#
       - name: Dispatch Metadata build
-        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           token: ${{ secrets.PULUMI_BOT_TOKEN }}
           repository: pulumi/registry
@@ -279,7 +279,7 @@ jobs:
       with:
         persist-credentials: false
 #{{- if .Config.GitHubApp.Enabled }}#
-    - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+    - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
       id: app-auth
       with:
         app-id: ${{ secrets.PULUMI_PROVIDER_AUTOMATION_APP_ID }}
@@ -287,7 +287,7 @@ jobs:
         owner: ${{ github.repository_owner }}
 #{{- end }}#
     - name: Clean up release labels
-      uses: pulumi/action-release-by-pr-label@main
+      uses: pulumi/action-release-by-pr-label@a90569296b805a3179b81c1860f5777073cc7aa2
       with:
         command: "clean-up-release-labels"
         repo: ${{ github.repository }}
