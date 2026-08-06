@@ -58,7 +58,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6
+      uses: #{{ .Config.ActionVersions.GolangCiLint }}#
       with:
         install-mode: none # Handled by mise.
         working-directory: #{{ .Config.ModulePath }}#
