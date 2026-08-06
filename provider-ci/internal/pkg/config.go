@@ -389,6 +389,7 @@ type actions struct {
 }
 
 type actionVersions struct {
+	GolangCiLint            string `yaml:"configureAwsCredentials"`
 	ConfigureAwsCredentials string `yaml:"configureAwsCredentials"`
 	ESCAuth                 string `yaml:"escAuth"`
 	ESCAction               string `yaml:"escAction"`
@@ -469,6 +470,8 @@ func loadDefaultConfig() (Config, error) {
 						switch name {
 						case "aws-actions/configure-aws-credentials":
 							config.ActionVersions.ConfigureAwsCredentials = uses
+						case "golangci/golangci-lint-action":
+							config.ActionVersions.GolangCiLint = uses
 						case "pulumi/auth-actions":
 							config.ActionVersions.ESCAuth = uses
 						case "pulumi/esc-action":
